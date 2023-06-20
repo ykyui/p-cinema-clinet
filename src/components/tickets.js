@@ -102,7 +102,7 @@ const AvailableMovie = () => {
                 <img className='h-full' src={`/api/attachmentHandler/${e.cover}`}></img>
                 {e.name}
             </div>)}
-            {JSON.stringify(availableMovie)}
+            {process.env.NEXT_PUBLIC_ENV == "DEV" ? <div>{JSON.stringify(availableMovie)}</div> : ""}
         </div>
     </div>
 }
@@ -123,7 +123,7 @@ const AvailableTheatres = () => {
         <div onClick={() => dispatch(changeAction("ticket"))}>Back</div>
         <div onClick={() => dispatch(selectAllTheatres())}>All</div>
         {ticketS.availableTheatres.map((e) => <div className='cursor-pointer' onClick={() => dispatch(updateSearch({ theatre: e }))}>{e.name}</div>)}
-        {JSON.stringify(ticketS.availableTheatres)}
+        {process.env.NEXT_PUBLIC_ENV == "DEV" ? <div>{JSON.stringify(ticketS.availableTheatres)}</div> : ""}
     </div>
 }
 

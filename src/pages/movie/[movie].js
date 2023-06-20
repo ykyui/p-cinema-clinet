@@ -51,6 +51,6 @@ export default function Movie({ data }) {
         <div>
             {data.desc}
         </div>
-        {JSON.stringify(data)}
+        {process.env.NEXT_PUBLIC_ENV == "DEV" ? <div>{JSON.stringify(data)}</div> : ""}
     </>
 }
