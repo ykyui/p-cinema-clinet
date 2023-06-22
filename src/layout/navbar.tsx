@@ -1,7 +1,8 @@
-import Button from "@/components/button"
-import { openDrawer } from "@/redux/drawerSlice";
+import Button from "../components/button"
+import { openDrawer } from "../redux/drawerSlice";
 import { useDispatch } from "react-redux";
-import Drawer from '@/layout/drawer';
+
+
 
 export default function NavBar(params) {
     const dispatch = useDispatch()

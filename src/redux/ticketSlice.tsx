@@ -1,26 +1,41 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import moment from "moment/moment";
+import { Theatre } from "../model/theatre";
+import { Movie } from "../model/movie";
+import { Field } from "../model/Field";
+import dayjs from "dayjs";
+
+interface _TicketStatus {
+    date: string
+    movie: Movie | undefined
+    theatre: Theatre | undefined
+    field: Field | undefined
+    action: string
+    availableTheatres: Theatre[]
+}
+const initialState: _TicketStatus = {
+    date: dayjs().format("YYYY-MM-DD"),
+    movie: undefined,
+    theatre: undefined,
+    field: undefined,
+    action: "ticket",
+    availableTheatres: []
+}
+
 
 export const ticketSlice = createSlice({
     name: "ticket",
-    initialState: {
-        movie: undefined,
-        date: moment().format("YYYY-MM-DD"),
-        theatre: undefined,
-        field: undefined,
-        action: "ticket",
-        availableTheatres: [],
-    },
+    initialState,
     reducers: {
-        selectAllMovie(state, action) {
+        selectAllMovie(state) {
             state.movie = undefined
             state.action = "ticket"
         },
-        selectAllTheatres(state, action) {
+        selectAllTheatres(state) {
             state.theatre = undefined
             state.action = "ticket"
         },
-        updateSearch(state, action) {
+        updateSearch(state, action: PayloadAction<{ movie?: Movie | undefined, date?: string | undefined, theatre?: Theatre | undefined }>) {
             state.movie = action.payload.movie ?? state.movie;
             state.date = action.payload.date ?? state.date;
             state.theatre = action.payload.theatre ?? state.theatre;

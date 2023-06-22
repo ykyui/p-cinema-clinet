@@ -1,8 +1,8 @@
-import { closeDrawer, drawerState } from "@/redux/drawerSlice";
+import { closeDrawer, drawerState } from "../redux/drawerSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close';
-import Tickets from "@/components/tickets";
+import Tickets from "../components/tickets";
 
 function disableScrolling() {
     var x = window.scrollX;

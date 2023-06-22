@@ -1,19 +1,15 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import NavBar from '@/layout/navbar'
-import { useState } from 'react'
-import Bener from '@/components/banner'
-import Banner from '@/components/banner'
+import Banner from '../components/banner'
 import dayjs from 'dayjs'
+import { Movie } from '../model/movie'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps<{ data: Array<Movie> }> = async (context) => {
   const response = await fetch(`http://${context.req.headers.host}/api/movies?date=${dayjs().format("YYYY-MM-DD")}`)
   const data = await response.json()
   return { props: { data } }
 }
 
-export default function Home({ data }) {
-
+export default function Home({ data }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
       <Banner>

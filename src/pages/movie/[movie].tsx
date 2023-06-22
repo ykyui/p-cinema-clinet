@@ -1,12 +1,14 @@
-import Button from "@/components/button";
-import NavBar from "@/layout/navbar";
-import { openDrawer } from "@/redux/drawerSlice";
-import { updateSearch } from "@/redux/ticketSlice";
+import Button from "../../components/button";
+import NavBar from "../../layout/navbar";
+import { openDrawer } from "../../redux/drawerSlice";
+import { updateSearch } from "../../redux/ticketSlice";
 import { useRouter } from 'next/router'
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from 'react'
+import { updateHead } from "../../redux/headSlice";
+import Head from "next/head";
 
 export async function getServerSideProps({ req, res, params }) {
-    console.log(`http://${req.headers.host}/api/movieDetail/${params.movie}`)
     const response = await fetch(`http://${req.headers.host}/api/movieDetail/${params.movie}`)
     if (response.status != 200) { }
     return {
@@ -16,8 +18,11 @@ export async function getServerSideProps({ req, res, params }) {
 
 export default function Movie({ data }) {
     const dispatch = useDispatch();
+    const titleString = `Cinema - ${data.name}`;
     return <>
-
+        <Head>
+            <title>{titleString}</title>
+        </Head>
         <div className="md:h-[336px] h-[400px] w-full bg-black flex items-center justify-center">
             <img className='object-fill h-full' src={`/api/attachmentHandler/${data.cover}`}></img>
         </div>

@@ -3,11 +3,15 @@ import EventIcon from '@mui/icons-material/Event';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeAction, selectAllMovie, selectAllTheatres, selectSeat, ticketState, updateSearch, updateTheatresList } from '@/redux/ticketSlice';
-import { drawerState } from '@/redux/drawerSlice';
+import { changeAction, selectAllMovie, selectAllTheatres, selectSeat, ticketState, updateSearch, updateTheatresList } from '../redux/ticketSlice';
+import { drawerState } from '../redux/drawerSlice';
 import SeattingPlan from './seattingPlan';
-import { arrayGen } from '@/helper';
+import { arrayGen } from '../helper';
 import dayjs from 'dayjs';
+import { Movie } from '../model/movie';
+import { Field } from '../model/Field';
+import { Seat } from '../model/seat';
+import { Theatre } from '../model/theatre';
 
 
 //ticket
@@ -41,7 +45,7 @@ const Ticket = () => {
             </div>
         </div>
         <div>
-            {ticketS.availableTheatres.filter((e) => ticketS.theatre == undefined || e.theatreId == ticketS.theatre.theatreId).map((e) => <div>
+            {ticketS.availableTheatres.filter((e: Theatre) => ticketS.theatre == undefined || e.theatreId == ticketS.theatre.theatreId).map((e :Theatre) => <div>
                 <div>{e.name}</div>
                 <TheatreMovies theatre={e} />
             </div>)}
@@ -52,14 +56,16 @@ const Ticket = () => {
 const TheatreMovies = ({ theatre }) => {
     const dispatch = useDispatch();
     const ticketS = useSelector(ticketState);
-    const [movies, setMovies] = useState([])
+    const [movies, setMovies] = useState([] as Movie[])
     useEffect(() => {
         fetch(`/api/searchMovie?date=${ticketS.date}&movieId=${ticketS.movie?.id ?? 0}&theatreId=${theatre.theatreId}`).then((e) => e.json()).then((e) => setMovies(e))
     }, [])
     return <div>{movies.map((e) => <Movie movie={e} />)}</div>
 }
-
-const Movie = ({ movie }) => {
+type MovieProps = {
+    movie: Movie
+}
+const Movie = ({ movie }: MovieProps) => {
     const dispatch = useDispatch();
     return <div>
         <div>{movie.name}</div>
@@ -72,15 +78,17 @@ const Movie = ({ movie }) => {
 const SelectSeat = () => {
     const dispatch = useDispatch();
     const ticketS = useSelector(ticketState);
-    const [selectedSeat, setSelectedSeat] = useState([])
-    const [field, setField] = useState()
+    const [selectedSeat, setSelectedSeat] = useState<Seat[]>([])
+    const [field, setField] = useState({} as Field)
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
-        fetch(`/api/fieldSettingPlan/${ticketS.field.fieldId}`).then((res) => res.json()).then((res) => setField(res))
+        setLoading(true)
+        fetch(`/api/fieldSettingPlan/${ticketS.field.fieldId}`).then((res) => res.json()).then((res) => setField(res)).finally(() => setLoading(false))
     }, [])
-    if (field == undefined) return <></>
+    if (loading) return <></>
     return <>
         <div onClick={() => dispatch(changeAction("ticket"))}>Back</div>
-        <SeattingPlan col={field.house.width} row={field.house.height} specialSeat={[...field.house.specialSeat, ...field.soldSeat]} selectedSeat={selectedSeat} setSelectedSeat={setSelectedSeat} />
+        <SeattingPlan col={field.house.width} row={field.house.height} specialSeat={[...field.house?.specialSeat, ...field.soldSeat]} selectedSeat={selectedSeat} setSelectedSeat={setSelectedSeat} />
     </>
 }
 
@@ -135,7 +143,7 @@ export default function Tickets(params) {
     const drawerS = useSelector(drawerState);
 
     useEffect(() => {
-        fetch(`/api/theatres`).then((e) => e.json()).then(e => dispatch(updateTheatresList(e)))
+        fetch(`/api/theatres`).then((e) => e.json()).then(e => { dispatch(updateTheatresList(e)) })
     }, [])
 
     useEffect(() => {
