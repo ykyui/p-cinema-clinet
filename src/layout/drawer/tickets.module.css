@@ -1,0 +1,30 @@
+.expand_collapse_icon {
+    width: 1em;
+    height: 1em;
+    position: relative;
+    display: inline-block;
+}
+
+.expand_collapse_icon::before, .expand_collapse_icon::after {
+    content: "";
+    position: absolute;
+    width: 1em;
+    height: .16em;
+    top: calc((1em / 2) - .08em);
+    background-color: white;
+    transition: 0.3s ease-in-out all;
+    border-radius: 0.03em;
+}
+
+.expand_collapse_icon::after {
+    transform: rotate(90deg);
+}
+
+.collapsed.expand_collapse_icon::after {
+    transform: rotate(180deg);
+}
+
+
+.collapsed.expand_collapse_icon::before {
+    transform: rotate(90deg) scale(0);
+}

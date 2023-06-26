@@ -1,8 +1,9 @@
-import { closeDrawer, drawerState } from "../redux/drawerSlice";
+import { closeDrawer, drawerState } from "../../redux/drawerSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close';
-import Tickets from "../components/tickets";
+import Tickets from "./tickets";
+import Theatres from "./theatres";
 
 function disableScrolling() {
     var x = window.scrollX;
@@ -30,14 +31,12 @@ export default function Drawer(params) {
         }
     }, [drawerS.open])
     if (!drawerS.open) return ""
-    return <div className={`${drawerS.open ? "block" : "hidden"} flex w-full z-10 fixed top-[40px]`}
-        style={{ height: "calc(100vh - 40px)" }}
-    >
-        <div className="md:flex-1 opacity-50 bg-black"></div>
-        <div className="w-full lg:w-auto bg-yellow-300 h-full overflow-y-auto overflow-x-hidden p-5">
-            <div className="flex justify-end" onClick={() => dispatch(closeDrawer())}> <CloseIcon /></div>
-            {drawerS.drawerType == "TICKETS" ? <Tickets></Tickets> : ""}
-            {drawerS.drawerType == "THEATRES" ? "THEATRES" : ""}
+    return <div className={`${drawerS.open ? "block" : "hidden"} flex w-full h-full z-10 fixed top-[40px] md:top-[80px]`}>
+        <div className="md:flex-1 opacity-50 bg-black" onClick={() => dispatch(closeDrawer())}></div>
+        <div className="w-full lg:w-auto h-full overflow-y-auto overflow-x-hidden p-5 " style={{ "backgroundImage": "linear-gradient(black,blue)" }}>
+            <div className="flex justify-end absolute right-5" onClick={() => dispatch(closeDrawer())}> <CloseIcon /></div>
+            {drawerS.drawerType == "TICKETS" ? <Tickets /> : ""}
+            {drawerS.drawerType == "THEATRES" ? <Theatres /> : ""}
             {drawerS.drawerType == "SEARCH" ? "SEARCH" : ""}
             {drawerS.drawerType == "ACCOUNT" ? "ACCOUNT" : ""}
         </div>

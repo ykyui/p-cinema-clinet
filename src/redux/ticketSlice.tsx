@@ -2,8 +2,10 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import moment from "moment/moment";
 import { Theatre } from "../model/theatre";
 import { Movie } from "../model/movie";
-import { Field } from "../model/Field";
+import { Field } from "../model/field";
 import dayjs from "dayjs";
+import { useDispatch } from "react-redux";
+import { openDrawer } from "./drawerSlice";
 
 interface _TicketStatus {
     date: string
@@ -29,11 +31,11 @@ export const ticketSlice = createSlice({
     reducers: {
         selectAllMovie(state) {
             state.movie = undefined
-            state.action = "ticket"
+            state.action = "ticket";
         },
         selectAllTheatres(state) {
             state.theatre = undefined
-            state.action = "ticket"
+            state.action = "ticket";
         },
         updateSearch(state, action: PayloadAction<{ movie?: Movie | undefined, date?: string | undefined, theatre?: Theatre | undefined }>) {
             state.movie = action.payload.movie ?? state.movie;
