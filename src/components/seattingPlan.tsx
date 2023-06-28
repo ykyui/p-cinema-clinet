@@ -76,7 +76,7 @@ export default function SeattingPlan({ col, row, specialSeat, selectedSeat, setS
                                 (seatType == "space" && !isSelect ? "opacity-0 " : "") +
                                 (isSelect ? "bg-green-400 " : seatColor[seatType] ?? "bg-yellow-200")}
                                 onClick={() => {
-                                    if (cantSelectSeatType[seatType] != '' || adminMode) selectSeat({ x, y, seatType: "" })
+                                    if (cantSelectSeatType[seatType] != '' || adminMode) selectSeat({ x, y, seatType: "", displayX: seatX, displayY: seatY % 26 })
                                 }}>
                                 {seatType != 'space' ? `${seatY / 26 >= 1 ? String.fromCharCode(a + seatY / 26 - 1) : ""}${String.fromCharCode(a + seatY % 26)}${seatX}` : ""} {specialIndex == -1 ? "" : seatType.substring(0, 1)}
                             </div>

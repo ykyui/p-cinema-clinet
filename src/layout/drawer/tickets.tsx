@@ -4,7 +4,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeAction, selectAllMovie, selectAllTheatres, selectSeat, ticketState, updateSearch, updateTheatresList } from '../../redux/ticketSlice';
-import { drawerState } from '../../redux/drawerSlice';
+import { drawerState, openDrawer } from '../../redux/drawerSlice';
 import SeattingPlan from '../../components/seattingPlan';
 import { arrayGen } from '../../helper';
 import dayjs from 'dayjs';
@@ -16,6 +16,7 @@ import Theatres from './theatres';
 import Button from '../../components/button';
 import style from './tickets.module.css'
 import BackArrow from '../../components/backArrow';
+import { initPayment, paymentState } from '../../redux/paymentSlice';
 
 
 //ticket
@@ -100,9 +101,74 @@ type SeatCombination = {
     selectedSeat: Seat[]
 }
 const SeatCombination = ({ selectedSeat }: SeatCombination) => {
+    const dispatch = useDispatch();
+    const ticketS = useSelector(ticketState);
+    const numberOfTickets = {
+        adult: useState(0),
+        student: useState(0),
+        child: useState(0),
+        disabled: useState(0),
+    }
+    const ticketType = Object.keys(numberOfTickets).map((k) => k)
+    const [mainType, setMainType] = useState(ticketType.at(0))
+    useEffect(() => {
+        let numberSet = 0
+        ticketType.forEach((k) => {
+            const [num, setNum] = numberOfTickets[k]
+            numberSet += num
+        })
+        if (numberSet > selectedSeat.length) {
+            const [num, setNum] = numberOfTickets[mainType]
+            if (num > 0) {
+                setNum(num - 1)
+            } else {
+                for (let index = 0; index < ticketType.length; index++) {
+                    const k = ticketType[index];
+                    const [num, setNum] = numberOfTickets[k]
+                    if (num > 0) {
+                        setNum(num - 1)
+                        break
+                    }
+                }
+            }
+        } else if (numberSet < selectedSeat.length) {
+            const [num, setNum] = numberOfTickets[mainType]
+            setNum(num + 1)
+        }
+    }, [selectedSeat.length])
 
-    return <div>
-
+    return <div className='grid grid-cols-2 text-center max-w-lg gap-4'>
+        {ticketType.map((k) => {
+            const [num, setNum] = numberOfTickets[k]
+            const [m, setM] = numberOfTickets[mainType]
+            return <div className='grid grid-cols-4'>
+                {k}
+                {mainType == k ? <div></div> : <Button onClick={() => {
+                    if (m > 0) {
+                        setNum(num + 1)
+                        setM(m - 1)
+                    }
+                }}>+</Button>}
+                {num}
+                {mainType == k ? <div></div> : <Button onClick={() => {
+                    if (num > 0) {
+                        setNum(num - 1)
+                        setM(m + 1)
+                    }
+                }}>-</Button>}
+            </div>
+        })}
+        <Button className='col-span-2' onClick={() => {
+            dispatch(initPayment({
+                field: ticketS.field,
+                adult: numberOfTickets.adult[0],
+                student: numberOfTickets.student[0],
+                child: numberOfTickets.child[0],
+                disabled: numberOfTickets.disabled[0],
+                selectedSeat
+            }))
+            dispatch(openDrawer("PAYMENT"))
+        }}>Confirm</Button>
     </div>
 }
 
@@ -120,10 +186,8 @@ const SelectSeat = () => {
     if (loading) return <></>
     return <>
         <BackArrow onClick={() => dispatch(changeAction("ticket"))}></BackArrow>
-        <div className='bg-white'>
-            <SeattingPlan col={field.house.width} row={field.house.height} specialSeat={[...field.house?.specialSeat, ...field.soldSeat]} selectedSeat={selectedSeat} setSelectedSeat={setSelectedSeat} />
-            <SeatCombination selectedSeat={selectedSeat} />
-        </div>
+        <SeattingPlan col={field.house.width} row={field.house.height} specialSeat={[...field.house?.specialSeat, ...field.soldSeat]} selectedSeat={selectedSeat} setSelectedSeat={setSelectedSeat} />
+        <SeatCombination selectedSeat={selectedSeat} />
     </>
 }
 

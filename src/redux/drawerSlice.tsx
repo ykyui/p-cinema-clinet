@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 interface InitialState {
     open: boolean
-    drawerType: 'TICKETS' | 'THEATRES' | 'SEARCH' | 'ACCOUNT'
+    drawerType: 'TICKETS' | 'THEATRES' | 'SEARCH' | 'ACCOUNT' | 'PAYMENT'
 }
 
 const initialState: InitialState = {
@@ -14,7 +14,7 @@ export const drawerSlice = createSlice({
     name: "drawer",
     initialState,
     reducers: {
-        openDrawer(state, action: PayloadAction<'TICKETS' | 'THEATRES' | 'SEARCH' | 'ACCOUNT'>) {
+        openDrawer(state, action: PayloadAction<'TICKETS' | 'THEATRES' | 'SEARCH' | 'ACCOUNT' | 'PAYMENT'>) {
             state.open = true
             state.drawerType = action.payload
         },

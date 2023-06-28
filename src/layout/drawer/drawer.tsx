@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from '@mui/icons-material/Close';
 import Tickets from "./tickets";
 import Theatres from "./theatres";
+import Payment from "./payment";
 
 function disableScrolling() {
     var x = window.scrollX;
@@ -37,6 +38,7 @@ export default function Drawer(params) {
             <div className="flex justify-end absolute right-5" onClick={() => dispatch(closeDrawer())}> <CloseIcon /></div>
             {drawerS.drawerType == "TICKETS" ? <Tickets /> : ""}
             {drawerS.drawerType == "THEATRES" ? <Theatres /> : ""}
+            {drawerS.drawerType == "PAYMENT" ? <Payment /> : ""}
             {drawerS.drawerType == "SEARCH" ? "SEARCH" : ""}
             {drawerS.drawerType == "ACCOUNT" ? "ACCOUNT" : ""}
         </div>

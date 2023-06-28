@@ -4,6 +4,7 @@ import { authSlice } from "./authSlice";
 import { createWrapper } from "next-redux-wrapper";
 import { ticketSlice } from "./ticketSlice";
 import { headSlice } from "./headSlice";
+import { paymentSlice } from "./paymentSlice";
 
 const store = () => configureStore({
     reducer: {
@@ -11,6 +12,7 @@ const store = () => configureStore({
         [authSlice.name]: authSlice.reducer,
         [ticketSlice.name]: ticketSlice.reducer,
         [headSlice.name]: headSlice.reducer,
+        [paymentSlice.name]: paymentSlice.reducer,
     }
 })
 
