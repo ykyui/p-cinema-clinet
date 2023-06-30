@@ -18,7 +18,7 @@ function enableScrolling() {
 }
 
 
-export default function Drawer(params) {
+export default function Drawer() {
     const drawerS = useSelector(drawerState);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -31,8 +31,8 @@ export default function Drawer(params) {
             enableScrolling()
         }
     }, [drawerS.open])
-    if (!drawerS.open) return ""
-    return <div className={`${drawerS.open ? "block" : "hidden"} flex w-full h-full z-10 fixed top-[40px] md:top-[80px]`}>
+    if (!drawerS.open) return <></>
+    return <div className={`${drawerS.open ? "block" : "hidden"} flex w-full h-full z-10 fixed top-[40px] md:top-[80px] pb-[40px] md:pb-[80px]`}>
         <div className="md:flex-1 opacity-50 bg-black" onClick={() => dispatch(closeDrawer())}></div>
         <div className="w-full lg:w-auto h-full overflow-y-auto overflow-x-hidden p-5 " style={{ "backgroundImage": "linear-gradient(black,blue)" }}>
             <div className="flex justify-end absolute right-5" onClick={() => dispatch(closeDrawer())}> <CloseIcon /></div>
