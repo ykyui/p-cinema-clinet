@@ -158,7 +158,7 @@ const SeatCombination = ({ selectedSeat }: SeatCombination) => {
                 }}>-</Button>}
             </div>
         })}
-        <Button className='col-span-2' onClick={() => {
+        <Button disable={selectedSeat.length == 0} className='col-span-2' onClick={() => {
             dispatch(initPayment({
                 field: ticketS.field,
                 adult: numberOfTickets.adult[0],
@@ -168,7 +168,7 @@ const SeatCombination = ({ selectedSeat }: SeatCombination) => {
                 selectedSeat
             }))
             dispatch(openDrawer("PAYMENT"))
-        }}>Confirm</Button>
+        }}>Checkout</Button>
     </div>
 }
 
@@ -186,7 +186,7 @@ const SelectSeat = () => {
     if (loading) return <></>
     return <>
         <BackArrow onClick={() => dispatch(changeAction("ticket"))}></BackArrow>
-        <SeattingPlan col={field.house.width} row={field.house.height} specialSeat={[...field.house?.specialSeat, ...field.soldSeat]} selectedSeat={selectedSeat} setSelectedSeat={setSelectedSeat} />
+        <SeattingPlan col={field.house.width} row={field.house.height} specialSeat={[...field.house?.specialSeat.filter((v) => field.soldSeat.findIndex((s) => v.x == s.x && v.y == s.y) == -1), ...field.soldSeat]} selectedSeat={selectedSeat} setSelectedSeat={setSelectedSeat} />
         <SeatCombination selectedSeat={selectedSeat} />
     </>
 }
