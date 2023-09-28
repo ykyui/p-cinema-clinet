@@ -15,8 +15,8 @@ export default function Home({ data }: InferGetServerSidePropsType<typeof getSer
   return (
     <>
       <Banner>
-        {data.filter(e => e.promo == 1).map((e) =>
-          <div className='flex justify-center items-center h-full relative' onClick={() => router.push(`/movie/${e.path}`)} >
+        {data.filter(e => e.promo == 1).map((e, i) =>
+          <div key={i} className='flex justify-center items-center h-full relative' onClick={() => router.push(`/movie/${e.path}`)} >
             <img className='object-fill h-full' src={`/api/attachmentHandler/${e.cover}`} ></img>
           </div>
         )}
@@ -25,7 +25,7 @@ export default function Home({ data }: InferGetServerSidePropsType<typeof getSer
         <div className='max-w-[1920px] '>
           <div className='text-2xl font-bold tracking-widest'>Movies</div>
           <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4'>
-            {data.map((e, i) => <a href={`/movie/${e.path}`}>
+            {data.map((e, i) => <a key={i} href={`/movie/${e.path}`}>
               <div className='aspect-[2/3]'>
                 <img src={`/api/attachmentHandler/${e.cover}`}></img>
               </div>

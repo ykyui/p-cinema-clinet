@@ -55,7 +55,7 @@ const Ticket = () => {
             </div>
         </div>
         <div className='pb-40 py-4'>
-            {availableTheatres.map((e: Theatre) => <div>
+            {availableTheatres.map((e: Theatre, i) => <div key={i}>
                 <div className='font-bold text-2xl cursor-pointer flex justify-between' onClick={() => setSelectTheatre(e == selectedTheatre ? undefined : e)}>
                     {e.name}
                     <div className={`${selectedTheatre?.theatreId == e.theatreId ? "" : style.collapsed} ${style.expand_collapse_icon}`}></div>
@@ -76,7 +76,7 @@ const TheatreMovies = ({ theatre }) => {
     }, [])
     if (loading) return <div className='h-8 opacity-5'>loading...</div>
     return <div className='space-y-4 transition-all duration-1000 opacity-100' >
-        {movies.map((e) => <Movie movie={e} />)}
+        {movies.map((e, i) => <Movie key={i} movie={e} />)}
     </div >
 }
 type MovieProps = {
@@ -93,7 +93,7 @@ const Movie = ({ movie }: MovieProps) => {
         </div>
         <div className='grid grid-cols-3 md:grid-cols-6'>
             {movie.fields == undefined ? "no fields" :
-                movie.fields.map((e) => <Button className='mr-2 p-2 inline-block cursor-pointer w-full' onClick={() => dispatch(selectSeat(e))}>{e.showTime.substring(0, 5)}</Button>)}
+                movie.fields.map((e, i) => <Button key={i} className='mr-2 p-2 inline-block cursor-pointer w-full' onClick={() => dispatch(selectSeat(e))}>{e.showTime.substring(0, 5)}</Button>)}
         </div>
     </div>
 }
@@ -138,10 +138,10 @@ const SeatCombination = ({ selectedSeat }: SeatCombination) => {
     }, [selectedSeat.length])
 
     return <div className='grid grid-cols-2 text-center max-w-lg gap-4'>
-        {ticketType.map((k) => {
+        {ticketType.map((k, i) => {
             const [num, setNum] = numberOfTickets[k]
             const [m, setM] = numberOfTickets[mainType]
-            return <div className='grid grid-cols-4'>
+            return <div key={i} className='grid grid-cols-4'>
                 {k}
                 {mainType == k ? <div></div> : <Button onClick={() => {
                     if (m > 0) {
@@ -205,7 +205,7 @@ const AvailableMovie = () => {
             <div className='aspect-[12/16] w-full bg-gray-500 opacity-60 flex items-center justify-center cursor-pointer' onClick={() => dispatch(selectAllMovie())}>
                 ALL
             </div>
-            {availableMovie.map((e) => <div className=' truncate ... cursor-pointer' onClick={() => dispatch(updateSearch({ movie: e }))}>
+            {availableMovie.map((e, i) => <div key={i} className=' truncate ... cursor-pointer' onClick={() => dispatch(updateSearch({ movie: e }))}>
                 <img className='aspect-[12/16] w-full' src={`/api/attachmentHandler/${e.cover}`}></img>
                 {e.name}
             </div>)}
@@ -221,7 +221,7 @@ const AvailableDate = () => {
         <div className='grid grid-cols-1 md:grid-cols-3'>
             {arrayGen(3).map((e, i) => {
                 const d = dayjs().add(i, 'day')
-                return <div className='cursor-pointer' onClick={() => dispatch(updateSearch({ date: d.format("YYYY-MM-DD") }))}>
+                return <div key={i} className='cursor-pointer' onClick={() => dispatch(updateSearch({ date: d.format("YYYY-MM-DD") }))}>
                     <div className="font-bold text-3xl">{`${i == 0 ? "Today" : i == 1 ? "Tomorrow" : d.format('dddd')}`}</div>
                     <div className='text-gray-500'>{d.format("MMM DD, YYYY")}</div>
                 </div>

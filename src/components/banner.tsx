@@ -39,8 +39,8 @@ export default function Banner({ children }: Props) {
     return <div className='md:h-[600px] h-[400px] relative overflow-hidden dragable hover:cursor-pointer ' ref={bannerRef} draggable>
         <div className='h-full transition ease-in-out duration-150 whitespace-nowrap' style={{ transform: `translateX(-${index * 100}%)` }}>
             <div className="h-full pointer-events: none">
-                {children.map((e) =>
-                    <div className='inline-block w-screen h-full'>
+                {children.map((e,i) =>
+                    <div key={i} className='inline-block w-screen h-full'>
                         {e}
                     </div>
                 )}
@@ -50,7 +50,7 @@ export default function Banner({ children }: Props) {
         <div className='absolute bottom-4 w-full'>
             <div className='flex items-center justify-center'>
                 {children.map((e, i) =>
-                    <div className='inline-block p-2'>
+                    <div key={i} className='inline-block p-2'>
                         <div className='w-4 h-4 border-2 rounded-full cursor-pointer hover:bg-blue-400 hover:border-0' style={{ background: index == i ? 'white' : null }} onClick={() => setIndex(i)}></div>
                     </div>
                 )}
